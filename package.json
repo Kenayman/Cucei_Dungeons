@@ -1,0 +1,16 @@
+{
+  "name": "cucei-dungeons",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "socket.io": "^4.6.1",
+    "tmx-parser": "^1.5.0"
+  }
+}
