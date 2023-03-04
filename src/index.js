@@ -1,5 +1,5 @@
 
-const SPEED = 5;
+const SPEED = 2;
 const TICK_RATE = 30;
 const PLAYER_SIZE = 32;
 const TILE_SIZE = 32;
