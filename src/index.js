@@ -1,6 +1,7 @@
 
-const SPEED = 2;
+const SPEED = 10;
 const TICK_RATE = 30;
+const SWORD_SPEED = 7;
 const PLAYER_SIZE = 32;
 const TILE_SIZE = 32;
 //Require
@@ -12,17 +13,14 @@ const httpServer = createServer(app);
 const io = new Server(httpServer);
 const loadMap = require('./mapLoader')
 
-
-
-
+//inputs
 let players = [];
 const inputsMap = {};
-
-
+let swords = [];
 //mapa
 async function main(){
   const {ground2D,decal2D} = await loadMap();
-//Ticks del server, cuanto tarda en moverse un personaje
+//Ticks del server, cuanto tarda en moverse un personaje o hacer una accion
 function tick(delta){
   for(const player of players){
     const inputs = inputsMap[player.id]
@@ -41,6 +39,7 @@ function tick(delta){
     }
   }
   io.emit('players', players)
+  io.emit('swords',swords)
 }
 
   //server
@@ -63,9 +62,22 @@ io.on('connect',(socket)=>{
   socket.emit('map',{
     ground: ground2D,
     decal: decal2D,
-  });
-
+  })
   io.emit('players', players)
+  //Ubicar el punto de donde se lanzaran las espadas, donde se encuentra el jugador
+  socket.on('swords', angle => {
+    const player= players.find(player => player.id ===socket.id)
+    swords.push({
+      angle,
+      x: player.x,
+      y: player.y
+    })
+  })
+  //Velocidad de la espada
+  for (const sword of swords){
+    sword.x += Math.cos(sword.angle)*SWORD_SPEED;
+    sword.y += Math.sin(sword.angle)*SWORD_SPEED;
+  }
 
   socket.on('inputs',(inputs)=>{
     inputsMap[socket.id]=inputs;

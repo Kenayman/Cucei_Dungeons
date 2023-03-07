@@ -8,6 +8,9 @@ mapImage.src = "tileSets.png"
 const knightImage = new Image();
 knightImage.src = "Knight.png"
 
+const knife = new Image();
+knife.src = "weapon_knife.png"
+
 //obtener las medidas del mapa
 const canvasEl  = document.getElementById('canvas')
 canvasEl.width = window.innerWidth;
@@ -20,6 +23,7 @@ const socket = io(`http://localhost:5000/`);
 let groundMap = [[]]
 let decalMap = [[]]
 let players = []
+let swords = [];
 
 socket.on('connect',()=>{
     console.log('conectado');
@@ -33,6 +37,10 @@ socket.on("map",(loadedMap)=>{
 
 socket.on('players',(serverPlayers)=>{
     players = serverPlayers
+})
+
+socket.on('swords', serverSword=>{
+    swords = serverSword;
 })
 //inputs para mover al personaje
 const inputs = {
@@ -74,6 +82,14 @@ window.addEventListener('keyup', (e)=>{
     }
     socket.emit('inputs', inputs)
 })
+window.addEventListener('click',(e)=>{
+    console.log('click');
+    const angle = Math.atan2(
+        e.clientY - canvasEl.height,
+        e.clientX - canvasEl.width
+        )
+    socket.emit('swords',angle)
+})
 //Mapa
 function loop() {
     //refrescar la imagen de la pantalla
@@ -97,7 +113,7 @@ function loop() {
                 TILE_SIZE
             )
         }
-    } 
+    }
 
     for(let fila = 0; fila< decalMap.length; fila++){
         for(let columna = 0; columna< decalMap[0].length; columna++){
@@ -118,8 +134,12 @@ function loop() {
         }
     }
     for(const p of players){
-    canvas.drawImage(knightImage, p.x, p.y)
-
+        canvas.drawImage(knightImage, p.x, p.y)
+    };
+    for(const sword of swords){
+        canvas.drawImage(knife, sword.x, sword.y, 8, 17);
+        canvas.beginPath();
+        canvas.fill();
     }
     window.requestAnimationFrame(loop)
 }
