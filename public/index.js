@@ -85,15 +85,24 @@ window.addEventListener('keyup', (e)=>{
 window.addEventListener('click',(e)=>{
     console.log('click');
     const angle = Math.atan2(
-        e.clientY - canvasEl.height,
-        e.clientX - canvasEl.width
+        e.clientY - canvasEl.height / 2,
+        e.clientX - canvasEl.width / 2
         )
     socket.emit('swords',angle)
 })
 //Mapa
 function loop() {
     //refrescar la imagen de la pantalla
-    canvas.clearRect(0,0,canvas.width,canvas.height)
+    canvas.clearRect(0,0,canvasEl.width,canvasEl.height)
+
+    const myPlayer = players.find(player => player.id === socket.id);
+    let camaraX = 0;
+    let camaraY = 0;
+
+    if(myPlayer){
+    camaraX = parseInt(myPlayer.x - canvasEl.width / 2)
+    camaraY = parseInt(myPlayer.y - canvasEl.height / 2)
+    }
 
     //Cargar cada posicion del mapa
     for(let fila = 0; fila< groundMap.length; fila++){
@@ -107,8 +116,8 @@ function loop() {
                 imageFila*TILE_SIZE,
                 TILE_SIZE,
                 TILE_SIZE,
-                columna* TILE_SIZE,
-                fila* TILE_SIZE,
+                columna* TILE_SIZE -camaraX,
+                fila* TILE_SIZE - camaraY,
                 TILE_SIZE,
                 TILE_SIZE
             )
@@ -126,18 +135,18 @@ function loop() {
                 imageFila*TILE_SIZE,
                 TILE_SIZE,
                 TILE_SIZE,
-                columna* TILE_SIZE,
-                fila* TILE_SIZE,
+                columna* TILE_SIZE -camaraX,
+                fila* TILE_SIZE - camaraY,
                 TILE_SIZE,
                 TILE_SIZE
             )
         }
     }
     for(const p of players){
-        canvas.drawImage(knightImage, p.x, p.y)
+        canvas.drawImage(knightImage, p.x - camaraX, p.y - camaraY)
     };
     for(const sword of swords){
-        canvas.drawImage(knife, sword.x, sword.y, 8, 17);
+        canvas.drawImage(knife, sword.x- camaraX, sword.y -camaraY, 8, 17);
         canvas.beginPath();
         canvas.fill();
     }

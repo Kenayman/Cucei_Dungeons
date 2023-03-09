@@ -1,8 +1,8 @@
 
-const SPEED = 10;
+const SPEED = 6;
 const TICK_RATE = 30;
-const SWORD_SPEED = 7;
-const PLAYER_SIZE = 32;
+const SWORD_SPEED = 10;
+const PLAYER_SIZE = 16;
 const TILE_SIZE = 32;
 //Require
 const express = require("express");
@@ -38,6 +38,32 @@ function tick(delta){
       player.x += SPEED
     }
   }
+  //Velocidad de la espada
+  for (const sword of swords){
+    sword.x += Math.cos(sword.angle)*SWORD_SPEED;
+    sword.y += Math.sin(sword.angle)*SWORD_SPEED;
+    sword.timeLeft -= delta;
+    //Esto sera guardado para los mounstros,por el momento afectara jugadores
+    for(const player of players){
+      if(player.id === sword.playerId) continue;
+      //Aqui calculara la distancia entre el XY del arma contra la del jugador en base a su pocision actual
+      const distancia = Math.sqrt(
+        (player.x + PLAYER_SIZE/2 - sword.x )**2 + (player.y + PLAYER_SIZE/2 - sword.y)**2
+
+      );
+      //Cantidad de cuadros requeridos para ejecutarlo
+      if(distancia <=PLAYER_SIZE/2){
+        player.x=0;
+        player.y=0;
+        //para que solo colisione con un solo jugador a la vez
+        sword.timeLeft = -1;
+        break;
+      }
+    }
+  }
+
+swords = swords.filter(sword => sword.timeLeft >= 0)
+
   io.emit('players', players)
   io.emit('swords',swords)
 }
@@ -65,19 +91,17 @@ io.on('connect',(socket)=>{
   })
   io.emit('players', players)
   //Ubicar el punto de donde se lanzaran las espadas, donde se encuentra el jugador
-  socket.on('swords', angle => {
-    const player= players.find(player => player.id ===socket.id)
+  socket.on('swords', (angle) => {
+    const player = players.find(player => player.id ===socket.id)
     swords.push({
       angle,
       x: player.x,
-      y: player.y
+      y: player.y,
+      timeLeft: 700,
+      playerId: socket.id
     })
   })
-  //Velocidad de la espada
-  for (const sword of swords){
-    sword.x += Math.cos(sword.angle)*SWORD_SPEED;
-    sword.y += Math.sin(sword.angle)*SWORD_SPEED;
-  }
+
 
   socket.on('inputs',(inputs)=>{
     inputsMap[socket.id]=inputs;
@@ -91,6 +115,12 @@ app.use(express.static("public"))
 
 httpServer.listen(5000);
 
-setInterval(tick,1000/TICK_RATE);
+let lastUpdate = Date.now();
+setInterval(()=>{
+  const now = Date.now()
+  const delta = now - lastUpdate
+  tick(delta)
+  lastUpdate = now
+},1000/TICK_RATE);
 }
 main();
