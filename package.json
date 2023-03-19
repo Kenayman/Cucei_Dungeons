@@ -2,9 +2,9 @@
   "name": "cucei-dungeons",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "game.js",
   "scripts": {
-    "dev": "nodemon src/index.js"
+    "dev": ""
   },
   "keywords": [],
   "author": "",
