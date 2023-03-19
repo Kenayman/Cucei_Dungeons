@@ -12,3 +12,8 @@ Se usaron las siguientes tecnologias:
 Deberas instalar los siguientes node modules:
 - Nodemon
 - Socket.io
+
+# Creditos
+
+- Penzilla (sprite)
+- Jawbreaker (TileSet)
