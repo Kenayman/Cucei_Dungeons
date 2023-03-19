@@ -13,7 +13,7 @@ Deberas instalar los siguientes node modules:
 - Nodemon
 - Socket.io
 
-# Creditos
+## Creditos
 
 - Penzilla (sprite)
 - Jawbreaker (TileSet)
