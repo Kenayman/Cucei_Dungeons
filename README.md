@@ -1,7 +1,7 @@
 # Cucei-Dungeons
 [![image.png](https://i.postimg.cc/SNvhJ5pg/image.png)](https://postimg.cc/nCB5W3rm)
 ## Introduccion
-Este projecto es una pequeña demo para un juego multijugador en linea, se ira actualizando con el tiempo para hacerlo mas completo.
+Este proyecto es una pequeña demo para un juego multijugador en linea, se ira actualizando con el tiempo para hacerlo mas completo.
 Se usaron las siguientes tecnologias:
 - Phaser3
 - html
