@@ -1,6 +1,7 @@
 //Creado por Kenayman
 //Muy papu el pedo
 
+var Game = {};
 //Escena y fisicas del juego
 var config = {
     type: Phaser.AUTO,
@@ -40,6 +41,8 @@ function preload() {
 }
 
 function create() {
+    
+    playerMap = {}
     //mapa
     mapa = this.make.tilemap({key:'mapa'});
     var tilesets = mapa.addTilesetImage('mapaTiles','tiles')
@@ -116,12 +119,12 @@ function create() {
     this.fondoMusica = this.sound.add('fondo', { volume: 0.5 });
     this.fondoMusica.play();
     this.fondoMusica = this.sound.add('fondo', { loop: true, volume: 0.5 });
-    
-
 
 
 
 }
+
+
 function update() {
     rojo.body.setVelocityX(0);
     rojo.body.setVelocityY(0);
@@ -179,3 +182,6 @@ function update() {
         rojo.anims.play('idle',true);
     }
 }
+
+
+
