@@ -1,0 +1,136 @@
+html {
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
+button {
+    padding: 10px 40px;
+    border-radius: 0px;
+}
+
+#game-container {
+    width: 100%; /* Cambiamos el ancho a 100% para que ocupe toda la pantalla */
+    height: 100vh; /* Cambiamos la altura a 100vh para que ocupe toda la altura de la pantalla */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+#game-list-options {
+    width: 800px; /* Ajusta el ancho a tu tamaño original */
+    padding: 20px;
+    position: absolute;
+    bottom: 0px;
+    background: #6F6F6F;
+    text-align: center;
+}
+
+
+#game-list {
+    height: calc(100vh - 100px); /* Restamos la altura de #game-list-options para ajustar el tamaño */
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
+#game-list table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#game-list table th {
+    background: #6f6f6f;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bolder;
+}
+
+#game-list table td,
+#game-list table th {
+    padding: 20px;
+    text-align: left;
+}
+
+#game-list table td:last-child,
+#game-list table th:last-child {
+    text-align: right;
+}
+
+#game-list table tr {
+    background: #5e0505;
+}
+
+#game-list table tr:nth-child(odd) {
+    background: #dadada;
+}
+
+#debug {
+    background: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    font-family: Menlo;
+    width: 37.7%; /* Mismo ancho que el lobby-container */
+    height: 250px; /* Ajustamos la altura para dejar espacio para #game y #chat-box */
+    margin: 0 auto;
+    padding: 20px;
+    font-size: 12px;
+    max-height: calc(100vh - 270px); /* Ajustamos la altura máxima */
+    overflow-y: auto;
+}
+#game {
+    height: calc(100vh - 100px); /* Ajustamos la altura para dejar espacio para #game-list-options y #chat-box */
+    width: 100%;
+    background: black;
+    position: absolute;
+    top: 0;
+    color: white;
+    overflow-y: auto;
+}
+
+#game p {
+    padding: 10px;
+}
+
+#game span {
+    float: right;
+}
+
+#chat-box {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: block;
+    background: grey;
+}
+
+#chat-box input {
+    border: none;
+    padding: 10px;
+    margin: 20px;
+    width: 79%;
+}
+#lobby-container {
+    width: 30%;
+    height: 100vh;
+    overflow: auto;
+}
+#lobby-container,
+#game-list {
+    width: 800px; /* Tamaño deseado */
+    height: 600px; /* Tamaño deseado */
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+

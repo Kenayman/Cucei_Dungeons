@@ -1,18 +1,16 @@
 {
   "name": "cucei-dungeons",
-  "version": "1.0.0",
-  "description": "",
-  "main": "game.js",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Lobby interactivo para estudiantes que quieren tener clases divertidas",
   "scripts": {
-    "dev": ""
+    "start": "nodemon src/server/index.js",
+    "postinstall": "node node_modules/bower/bin/bower install"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
-    "phaser": "^3.55.2",
-    "socket.io": "^4.6.1",
-    "tmx-parser": "^1.5.0"
+    "bower": "^1.7.2",
+    "express": "^4.13.3",
+    "node-uuid": "^1.4.7",
+    "socket.io": "^1.4.4"
   }
 }

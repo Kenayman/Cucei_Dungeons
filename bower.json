@@ -1,0 +1,15 @@
+{
+    "name": "cucei-dungeons",
+    "description": "Lobby interactivo para estudiantes que quieren tener clases divertidas",
+    "main": "index.js",
+    "authors": [
+    "Isaac Johnson <hello@isaacjohnsononline.com>"
+  ],
+    "homepage": "https://github.com/Kenayman/Cucei_Dungeons",
+    "private": true,
+    "dependencies": {
+        "phaser": "~2.4.4",
+        "jquery": "~2.2.0"
+
+    }
+}
