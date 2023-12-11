@@ -31,8 +31,6 @@ server.on('connection', function (client) {
             delete clients[client.id];
         }
     });
-    
-
     client.on('join', function(roomID, callback) {
         // join existing room
         if (connectClientToRoom(roomID, client.id, false)) {
