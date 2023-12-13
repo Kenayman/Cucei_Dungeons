@@ -87,12 +87,13 @@ button {
 }
 #game {
     height: calc(100vh - 100px); /* Ajustamos la altura para dejar espacio para #game-list-options y #chat-box */
-    width: 100%;
+    width: 25%;
     background: black;
-    position: absolute;
+    /*position: absolute;*/
     top: 0;
     color: white;
     overflow-y: auto;
+    float: right;
 }
 
 #game p {
@@ -133,4 +134,3 @@ button {
     right: 0;
     margin: auto;
 }
-

@@ -64,7 +64,10 @@
     function initGame() {
         $('#game-container').append(
             '<div id=game></div>' +
-            '<div id=chat-box><form action=""><input autofocus id="chat-box-input" autocomplete="off" /><button>Send</button></form></div>');
+            '<div id=chat-box><form action=""><input autofocus id="chat-box-input" autocomplete="off" /><button>Send</button></form></div>' +
+            `<div id="dungeons">
+            <script src=/js/dungeons.js></script>
+        </div>`);
     }
 
 
