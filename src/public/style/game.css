@@ -1,6 +1,8 @@
 html {
     box-sizing: border-box;
     font-family: sans-serif;
+    background-color: #2D353B;
+    color: #D3C6AA;
 }
 
 *,
@@ -11,12 +13,14 @@ html {
 
 button {
     padding: 10px 40px;
-    border-radius: 0px;
+    border-radius: 8px;
+    background-color: #2D353B;
+    color: #D3C6AA;
 }
 
 #game-container {
-    width: 100%; /* Cambiamos el ancho a 100% para que ocupe toda la pantalla */
-    height: 100vh; /* Cambiamos la altura a 100vh para que ocupe toda la altura de la pantalla */
+    width: 100%;
+    height: 100vh;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -26,51 +30,60 @@ button {
 }
 
 #game-list-options {
-    width: 800px; /* Ajusta el ancho a tu tamaño original */
+    width: 100%; /* Ajusta el ancho a tu tamaño original */
     padding: 20px;
     position: absolute;
-    bottom: 0px;
-    background: #6F6F6F;
+    bottom: 10px;
+    background: #3D484D;
     text-align: center;
+    border-radius: 8px;
 }
 
 
 #game-list {
-    height: calc(100vh - 100px); /* Restamos la altura de #game-list-options para ajustar el tamaño */
+    height: calc(100vh - 100px);
     max-height: calc(100vh - 100px);
     overflow-y: auto;
 }
 
 #game-list table {
     width: 100%;
-    border-collapse: collapse;
-    border-spacing: 0;
+    border-collapse: separate;
+    border-spacing: 0 10px;
 }
 
 #game-list table th {
-    background: #6f6f6f;
-    color: white;
+    background: #3D484D;
+    color: #D3C6AA;
     text-transform: uppercase;
     font-weight: bolder;
+    
 }
 
 #game-list table td,
 #game-list table th {
-    padding: 20px;
     text-align: left;
+    padding: 20px;
 }
 
 #game-list table td:last-child,
 #game-list table th:last-child {
     text-align: right;
+    border-radius: 0 8px 8px 0;
+}
+
+#game-list table td:first-child,
+#game-list table th:first-child {
+    text-align: left;
+    border-radius: 8px 0 0 8px;
 }
 
 #game-list table tr {
-    background: #5e0505;
+    background: #4F585E;
 }
 
 #game-list table tr:nth-child(odd) {
-    background: #dadada;
+    background: #56635f;
 }
 
 #debug {
@@ -88,7 +101,7 @@ button {
 #game {
     height: calc(100vh - 100px); /* Ajustamos la altura para dejar espacio para #game-list-options y #chat-box */
     width: 25%;
-    background: black;
+    background: #232A2E;
     /*position: absolute;*/
     top: 0;
     color: white;
@@ -109,7 +122,7 @@ button {
     bottom: 0;
     width: 100%;
     display: block;
-    background: grey;
+    background: #3D484D;
 }
 
 #chat-box input {
@@ -117,6 +130,8 @@ button {
     padding: 10px;
     margin: 20px;
     width: 79%;
+    color: #D3C6AA;
+    background-color: #232A2E;
 }
 #lobby-container {
     width: 30%;
@@ -125,8 +140,8 @@ button {
 }
 #lobby-container,
 #game-list {
-    width: 800px; /* Tamaño deseado */
-    height: 600px; /* Tamaño deseado */
+    width: 90%;
+    height: 100vh;
     position: absolute;
     top: 0;
     bottom: 0;

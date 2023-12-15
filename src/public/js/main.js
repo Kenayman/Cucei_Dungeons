@@ -57,14 +57,14 @@
             '<tr class="room-list-item">'
             + '<td>' + room.id + '</td>'
             + '<td>' + room.clients.length + '/10</td>'
-            + '<td><button id=btn-join-game data-button=' + room.id + '>Join Room</button></td>'
+            + '<td><button id=btn-join-game data-button=' + room.id + '>Unirse</button></td>'
         );
     }
 
     function initGame() {
         $('#game-container').append(
             '<div id=game></div>' +
-            '<div id=chat-box><form action=""><input autofocus id="chat-box-input" autocomplete="off" /><button>Send</button></form></div>' +
+            '<div id=chat-box><form action=""><input autofocus id="chat-box-input" autocomplete="off" /><button>Enviar</button></form></div>' +
             `<div id="dungeons">
             <script src=/js/dungeons.js></script>
         </div>`);
