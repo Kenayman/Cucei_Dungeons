@@ -31,49 +31,53 @@ server.on('connection', function (client) {
             delete clients[client.id];
         }
     });
-    client.on('join', function(roomID, callback) {
-        // join existing room
-        if (connectClientToRoom(roomID, client.id, false)) {
+    client.on('host', function(data, callback) {
+        var playerName = data.playerName;
+        var newRoomID = uuid.v4();
+        if (connectClientToRoom(newRoomID, client.id, playerName, true)) {
+            callback(newRoomID);
+        }
+    });
+    
+    client.on('join', function(data, callback) {
+        var playerName = data.playerName;
+        var roomID = data.roomID;
+        if (connectClientToRoom(roomID, client.id, playerName, false)) {
             callback(roomID);
         }
     });
 
-    client.on('host', function(data, callback) {
-        // create a new room ID on the host
-        var newRoomID = uuid.v4();
-        if (connectClientToRoom(newRoomID, client.id, true)) {
-            callback(newRoomID);
-        }
-    });
-
     client.on('chatMessage', function(msg) {
-        var room = findRoomByID(client.id, rooms);
-        server.sockets.in(room.id).emit('addChatMessage', msg, client.id, clients[client.id].color);
-    });
+    var room = findRoomByID(client.id, rooms);
+    var playerName = clients[client.id].playerName; // Obtener el nombre del jugador
+    server.sockets.in(room.id).emit('addChatMessage', msg, playerName, clients[client.id].color);
+});
 
-    function connectClientToRoom(roomID, clientID, isHost) {
+
+    function connectClientToRoom(roomID, clientID, playerName, isHost) {
         if (clients[clientID].isHost || clients[clientID].room) {
             return false;
         }
-
+    
         client.join(roomID, function(err) {
             if (!err) {
                 clients[client.id].isHost = isHost;
                 clients[client.id].room = roomID;
-
+                clients[client.id].playerName = playerName; // Guardar el nombre del jugador
+    
                 if (isHost) {
                     rooms[roomID] = new Room(roomID, clientID);
-                    broadcastDebugMsg(clientID + ' has created room: ' + roomID);
+                    broadcastDebugMsg(playerName + ' has created room: ' + roomID);
                 } else {
                     rooms[roomID].addClient(clientID);
-                    broadcastDebugMsg(client.id + ' has joined room: ' + roomID);
+                    broadcastDebugMsg(playerName + ' has joined room: ' + roomID);
                 }
                 server.sockets.emit('update', rooms);
             } else {
                 // handle error message
             }
         });
-
+    
         return true;
     }
 
