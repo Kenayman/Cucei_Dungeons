@@ -1,46 +1,94 @@
-class Example extends Phaser.Scene
+class Game extends Phaser.Scene
 {
     preload ()
     {
-        this.load.setBaseURL('https://labs.phaser.io');
-
-        this.load.image('sky', 'assets/skies/space3.png');
-        this.load.image('logo', 'assets/sprites/phaser3-logo.png');
-        this.load.image('red', 'assets/particles/red.png');
+        this.load.spritesheet('DinoTard', 'img/DinoSprites - tard.png', {frameWidth: 24, frameHeight: 24});
     }
 
     create ()
     {
-        this.add.image(400, 300, 'sky');
+        player = this.physics.add.sprite(100, 100, 'DinoTard', 0);
+        player.setScale(2.5);
+        player.setCollideWorldBounds(true);
+        
+        //Animator
 
-        const particles = this.add.particles(0, 0, 'red', {
-            speed: 100,
-            scale: { start: 1, end: 0 },
-            blendMode: 'ADD'
-        });
+        this.anims.create({
+            key: 'walk',
+            frames: this.anims.generateFrameNumbers('DinoTard', {start: 4, end: 9}),
+            frameRate: 10,
+        })
 
-        const logo = this.physics.add.image(400, 100, 'logo');
+        this.anims.create({
+            key: 'idle',
+            frames: this.anims.generateFrameNumbers('DinoTard', {start: 0, end: 3}),
+            frameRate: 10
+        })
 
-        logo.setVelocity(100, 200);
-        logo.setBounce(1, 1);
-        logo.setCollideWorldBounds(true);
+        this.physics.world.enable(player);
 
-        particles.startFollow(logo);
+        up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
     }
+    update() {
+        player.body.setVelocity(0); // Restablece la velocidad en cada frame
+    
+        if (left.isDown) {
+            player.body.setVelocityX(-speed);
+            player.flipX = true;
+            if (up.isDown) {
+                player.body.setVelocityY(-diagonalSpeed);
+            } else if (down.isDown) {
+                player.body.setVelocityY(diagonalSpeed);
+            }
+        } else if (right.isDown) {
+            player.body.setVelocityX(speed);
+            player.flipX = false;
+            if (up.isDown) {
+                player.body.setVelocityY(-diagonalSpeed);
+            } else if (down.isDown) {
+                player.body.setVelocityY(diagonalSpeed);
+            }
+        } else if (up.isDown) {
+            player.body.setVelocityY(-speed);
+        } else if (down.isDown) {
+            player.body.setVelocityY(speed);
+        }
+
+        if(left.isDown || right.isDown || up.isDown || down.isDown)
+        {
+        player.anims.play('walk', true)
+        }
+        else{
+            player.anims.play('idle', true)
+        }
+    }
+
+    
+    
 }
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    scene: Example,
+    width: 1430,
+    height: 900,
+    autoResize: true,
+    scene: Game,
     parent: 'dungeons',
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 200 }
+            debug: false,
+            gravity: { y: 0, x: 0}
         }
     }
 };
 
 const game = new Phaser.Game(config);
+var player;
+var up,down,left,right
+const speed = 350;
+const diagonalSpeed = Math.sqrt(speed * speed / 2);
