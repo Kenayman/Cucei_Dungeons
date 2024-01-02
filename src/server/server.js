@@ -15,16 +15,36 @@ var Server = function() {
         res.sendFile(__dirname + '/../public/index.html');
     });
 
-    // listen on port 3000 for user connections
-    //app.listen(process.env.PORT);
+    // all we need is the io handle for client server communication - encapsulate the rest
+    io.on('connection', function (socket) {
+        console.log('a user connected');
+
+        socket.on('disconnect', function () {
+            console.log('user disconnected');
+        });
+
+        socket.on('host', function (data, callback) {
+            // Aquí almacenamos el nombre del jugador con su ID
+            socket.playerName = data.playerName;
+            console.log(socket.playerName + ' has joined as host');
+            callback('roomID'); // Reemplaza 'roomID' con la lógica adecuada
+        });
+
+        socket.on('join', function (data, callback) {
+            // Aquí almacenamos el nombre del jugador con su ID
+            socket.playerName = data.playerName;
+            console.log(socket.playerName + ' has joined');
+            callback('roomID'); // Reemplaza 'roomID' con la lógica adecuada
+        });
+
+        // Resto de tu código para gestionar otras acciones del socket...
+    });
+
     http.listen(process.env.PORT, function () {
         console.log('listening on *:' + process.env.PORT);
     });
 
-    // all we need is the io handle for client sever communication - encapsulate the rest
     return io;
 };
 
 module.exports = Server;
-
-
