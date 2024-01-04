@@ -16,29 +16,48 @@ var Server = function() {
     });
 
     // all we need is the io handle for client server communication - encapsulate the rest
-    io.on('connection', function (socket) {
-        console.log('a user connected');
+    var players = {}
 
-        socket.on('disconnect', function () {
-            console.log('user disconnected');
-        });
+io.on('connection', function (socket) {
+  console.log('player [' + socket.id + '] connected')
 
-        socket.on('host', function (data, callback) {
-            // Aquí almacenamos el nombre del jugador con su ID
-            socket.playerName = data.playerName;
-            console.log(socket.playerName + ' has joined as host');
-            callback('roomID'); // Reemplaza 'roomID' con la lógica adecuada
-        });
+  players[socket.id] = {
+    rotation: 0,
+    x: 30,
+    y: 30,
+    playerId: socket.id,
+    color: getRandomColor()
+  }
+  socket.emit('currentPlayers', players)
+  socket.broadcast.emit('newPlayer', players[socket.id])
+ 
+  socket.on('disconnect', function () {
+    console.log('player [' + socket.id + '] disconnected')
+    delete players[socket.id]
+    io.emit('playerDisconnected', socket.id)
+  })
 
-        socket.on('join', function (data, callback) {
-            // Aquí almacenamos el nombre del jugador con su ID
-            socket.playerName = data.playerName;
-            console.log(socket.playerName + ' has joined');
-            callback('roomID'); // Reemplaza 'roomID' con la lógica adecuada
-        });
+  socket.on('playerMovement', function (movementData) {
+    players[socket.id].x = movementData.x
+    players[socket.id].y = movementData.y
+    players[socket.id].rotation = movementData.rotation
 
-        // Resto de tu código para gestionar otras acciones del socket...
-    });
+    socket.broadcast.emit('playerMoved', players[socket.id])
+  })
+  socket.on('playerAnimation', function (data) {
+    // Transmitir la animación a todos los clientes excepto al jugador que la envía
+    socket.broadcast.emit('playerAnimation', data);
+});
+socket.on('playerName', function (data) {
+  // Transmitir el nombre a todos los clientes excepto al jugador que lo envía
+  socket.broadcast.emit('playerName', data);
+});
+
+})
+
+function getRandomColor() {
+  return '0x' + Math.floor(Math.random() * 16777215).toString(16)
+}
 
     http.listen(process.env.PORT, function () {
         console.log('listening on *:' + process.env.PORT);

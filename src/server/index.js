@@ -74,7 +74,7 @@ server.on('connection', function (client) {
                 }
                 server.sockets.emit('update', rooms);
             } else {
-                // handle error message
+                // error
             }
         });
     
