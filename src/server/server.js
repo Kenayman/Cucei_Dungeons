@@ -23,8 +23,8 @@ io.on('connection', function (socket) {
 
   players[socket.id] = {
     rotation: 0,
-    x: 30,
-    y: 30,
+    x: 401.5879113843,
+    y: 170.06018696376,
     playerId: socket.id,
     color: getRandomColor()
   }
@@ -46,13 +46,13 @@ io.on('connection', function (socket) {
   })
   socket.on('playerAnimation', function (data) {
     // Transmitir la animación a todos los clientes excepto al jugador que la envía
+    // console.log('Datos de animacion recibidos (SERVER): ', data);
     socket.broadcast.emit('playerAnimation', data);
 });
 socket.on('playerName', function (data) {
   // Transmitir el nombre a todos los clientes excepto al jugador que lo envía
   socket.broadcast.emit('playerName', data);
 });
-
 })
 
 function getRandomColor() {
