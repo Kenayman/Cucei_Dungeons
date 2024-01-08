@@ -65,7 +65,7 @@ function create() {
   this.socket.on('currentPlayers', function (players) {
     Object.keys(players).forEach(function (id) {
       if (players[id].playerId === self.socket.id) {
-        addPlayer(self, players[id], spawnPoint);
+        addPlayer(self, players[id], spawnPoint, solidos);
       } else {
         addOtherPlayers(self, players[id], spawnPoint);
         // Aquí se agrega el nombre del jugador al sprite de otros jugadores
@@ -136,13 +136,15 @@ function create() {
 
 }
 
-function addPlayer(self, playerInfo, spawnPoint) {
+function addPlayer(self, playerInfo, spawnPoint, solidos) {
   self.player = self.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'DinoTard')
     .setOrigin(0.5, 0.5)
     .setDisplaySize(60, 60)
     .setCollideWorldBounds(true)
     .setTint(playerInfo.color)
     .setDrag(1000);
+  
+  self.physics.add.collider(self.player, solidos);
 
   self.anims.create({
     key: 'walk',
