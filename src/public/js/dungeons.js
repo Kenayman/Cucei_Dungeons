@@ -20,7 +20,6 @@ var config = {
 var game = new Phaser.Game(config)
 
 function preload() {
-  this.load.image('car', 'img/car.png')
   this.load.spritesheet('DinoTard', 'img/DinoSprites - tard.png', { frameWidth: 24, frameHeight: 24 });
   this.load.tilemapTiledJSON('map', 'img/mapa.json');
   this.load.image('tiles', 'img/ImageClassroom.png');
@@ -68,7 +67,7 @@ function create() {
         addPlayer(self, players[id], spawnPoint, solidos);
       } else {
         addOtherPlayers(self, players[id], spawnPoint);
-        // Aquí se agrega el nombre del jugador al sprite de otros jugadores
+        // Agregar el nombre del jugador al sprite de otros jugadores
         self.otherPlayers.getChildren().forEach(function (otherPlayer) {
           if (players[id].playerId === otherPlayer.playerId) {
             otherPlayer.playerName = self.add.text(0, 0, players[id].name, {
@@ -84,7 +83,7 @@ function create() {
       }
     });
   });
-
+  
   this.socket.on('newPlayer', function (playerInfo) {
     addOtherPlayers(self, playerInfo, spawnPoint)
   })
@@ -114,6 +113,11 @@ function create() {
       }
     });
   });
+
+  this.socket.on('roomInfo', function (roomInfo) {
+    self.socket.emit('joinRoom', { roomID: roomInfo.roomID });
+  });
+
   this.cursors = this.input.keyboard.createCursorKeys()
 
   this.socket.on('playerMoved', function (playerInfo) {
@@ -137,31 +141,35 @@ function create() {
 }
 
 function addPlayer(self, playerInfo, spawnPoint, solidos) {
-  self.player = self.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'DinoTard')
-    .setOrigin(0.5, 0.5)
-    .setDisplaySize(60, 60)
-    .setCollideWorldBounds(true)
-    .setTint(playerInfo.color)
-    .setDrag(1000);
-  
-  self.physics.add.collider(self.player, solidos);
+  // Si el jugador actual tiene el mismo ID que el jugador representado por el sprite
+  if (playerInfo.playerId === self.socket.id) {
+    self.player = self.physics.add.sprite(spawnPoint.x, spawnPoint.y, 'DinoTard')
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(60, 60)
+      .setCollideWorldBounds(true)
+      .setTint(playerInfo.color)
+      .setDrag(1000);
+    
+    self.physics.add.collider(self.player, solidos);
 
-  self.anims.create({
-    key: 'walk',
-    frames: self.anims.generateFrameNumbers('DinoTard', { start: 4, end: 9 }),
-    frameRate: 10,
-  });
+    self.anims.create({
+      key: 'walk',
+      frames: self.anims.generateFrameNumbers('DinoTard', { start: 4, end: 9 }),
+      frameRate: 10,
+    });
 
-  self.anims.create({
-    key: 'idle',
-    frames: self.anims.generateFrameNumbers('DinoTard', { start: 0, end: 3 }),
-    frameRate: 10,
-    repeat: -1, // Repetir indefinidamente
-  });
+    self.anims.create({
+      key: 'idle',
+      frames: self.anims.generateFrameNumbers('DinoTard', { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1, // Repetir indefinidamente
+    });
 
-  self.player.anims.play('idle'); // Asegurarse de que la animación 'idle' se reproduzca al inicio
-  self.cameras.main.startFollow(self.player);
+    self.player.anims.play('idle'); // Asegurarse de que la animación 'idle' se reproduzca al inicio
+    self.cameras.main.startFollow(self.player);
+  }
 }
+
 
 
 function addOtherPlayers(self, playerInfo, spawnPoint) {

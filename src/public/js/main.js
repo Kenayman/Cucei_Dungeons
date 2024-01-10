@@ -1,28 +1,31 @@
 (function () {
     var socket = io();
     var lobbyContainer = $('#lobby-container');
+    var joinedRoom = false;
 
-    // Manejar cuando se presiona el botón "Create new game"
     $('#game-container').on('click', '#btn-host-game', function() {
         var playerName = prompt("Ingrese su nombre:");
-        if (playerName) {
+        if (playerName && !joinedRoom) {
             socket.emit('host', { playerName: playerName }, function(roomID) {
                 initGame();
                 hideLobby();
+                joinedRoom = true;
             });
         }
     });
     
     $('#game-container').on('click', '#btn-join-game', function() {
         var playerName = prompt("Ingrese su nombre:");
-        if (playerName) {
+        if (playerName && !joinedRoom) {
             var roomID = $(this).data('button');
             socket.emit('join', { roomID: roomID, playerName: playerName }, function(data) {
                 initGame();
                 hideLobby();
+                joinedRoom = true;
             });
         }
     });
+    
     
     function hideLobby() {
         lobbyContainer.hide();
